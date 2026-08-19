@@ -1,83 +1,63 @@
-# Portfolio — initial template
+# Photography portfolio — draft
 
-A multi-page static site for photography + writing. No build step, no
-dependencies; open `index.html` and it runs.
-
-## Design references (what goes where)
-
-- **Tammeva / Karmir** → editorial restraint, serif display type, quiet
-  layouts, generous whitespace. Lives in: overall pacing, `hero`,
-  `page-head`, `about__lede`.
-- **Shibaki covers** → tight typographic stacks, labeled rules, rotated
-  mono text. Lives in: `.hero__aside` (vertical mono stack), `.rule`
-  (labeled hairline), tight italic/roman mixing in headlines.
-- **NERV** → monospace metadata, corner brackets, amber accent, technical
-  readouts in the margin. Lives in: `.rail`, `.hero__meta`,
-  `.tile__meta`, `.brackets`, plus the optional **NERV theme** (click
-  the `NERV` button in the header to flip to dark/amber mode).
-
-## Files
+Static site. No build step, no dependencies. Open `index.html`, or drop the
+folder on Netlify / Vercel / GitHub Pages as-is.
 
 ```
-index.html         Home — hero + featured photos + writing teasers
-photography.html   Full gallery + filter strip
-writing.html       Archive as table of contents
-about.html         Bio + side metadata + clients/publications
-styles.css         All design tokens + layout + motion
-script.js          Theme toggle (persisted) + live rail clock + filter tabs
+index.html      structure and the copy
+styles.css      all design tokens at the top of the file
+script.js       SERIES object — your photos live here
+images/         58 frames, resized to 1600px, ~15 MB total
 ```
 
-## Customizing
+## Where the design came from
 
-**Your name, copy, links.** Search `Your Name`, `hello@yourdomain.com`,
-and `@yourhandle` across the four HTML files and replace.
+Both reference layouts fed in: the colour-blocked project bands with the
+big-hero / two-supporting grid come from the first, the rotated headline,
+index number and tiny caption stacks come from the second.
 
-**Photos.** Every photo slot is a `.tile` with a `.placeholder` div.
-Replace with a real image:
+The palette is sampled from your negatives rather than picked:
 
-```html
-<figure class="tile tile--a">
-  <img src="images/plate-01.jpg" alt="Untitled (window)">
-  <figcaption class="tile__meta">
-    <span>UNTITLED (WINDOW)</span>
-    <span class="idx">01 / 32</span>
-  </figcaption>
-</figure>
-```
+- **Page background `#E9D3C6`** is the orange mask of colour-negative film base.
+- **Band colours** are each series' measured dominant hue — Tokyo came back
+  blue (220°), California gold (40°), Portraits red (15°, from the neon frames).
+  Paris/Berlin is graphite because half that batch is black and white.
 
-The placeholders render as crossed squares so the layout reads correctly
-before you've dropped in files.
+The **film-edge rail** down the left is the signature: a strip of unexposed
+base carrying the edge markings, tracking which series you're standing in.
 
-**Colors / type.** All tokens are CSS variables at the top of
-`styles.css`:
+## Things to change
 
-- `--paper`, `--ink`, `--amber` — core palette
-- `--serif`, `--mono` — swap fonts here (currently EB Garamond +
-  JetBrains Mono, loaded from Google Fonts)
+1. **The two "Elsewhere" links** in `#contact` still point at `#`. Instagram
+   and print shop URLs go there, or delete the column.
+2. **Series copy** — I wrote the descriptions from what's actually in the
+   frames (Sensō-ji, Treptower Park, the Marin headlands). They're a starting
+   point in a plausible voice, not your words. Rewrite them.
+3. **Captions** — the `cap` fields in `script.js` are invented. Same for the
+   `alt` text: it's descriptive and usable, but you know these photos.
+4. **The metadata is real.** Frame counts, year ranges, format splits and the
+   colour/black-and-white breakdown were computed from the files. Roll 067415
+   is the actual lab job number on the Paris/Berlin scans. If you regroup the
+   photos, recount.
 
-To change the accent from NERV amber to, say, a cooler red, change
-`--amber` once and the rail, brackets, active states, and hover
-underlines all follow.
+## Adding or reordering photos
 
-**Dark / NERV mode.** The `[data-theme="nerv"]` block in `styles.css`
-redefines the tokens for dark. Toggle persists in `localStorage`.
+Everything runs off the `SERIES` object at the top of `script.js`. Add an
+entry there and the lightbox picks it up. The three photos shown in each band
+are hardcoded in `index.html` so they can be server-rendered — the
+`data-open` / `data-i` attributes point at the index in `SERIES`.
 
-## Known trade-offs / next steps
+## Before it goes live
 
-- No lightbox on the photo grid yet — tiles hover-zoom but don't open.
-  Easy add if you want one.
-- Writing entries are dummy links (`href="#"`). Point these at real
-  article pages or a CMS once you have content.
-- The `.hero__aside` vertical mono strip hides below 860px; I'd rather
-  drop it on mobile than cramp the headline. Adjust in the responsive
-  section if you disagree.
-- Fonts load from Google Fonts over the network. Self-host if you want
-  offline / privacy-clean.
+- Images are progressive JPEG at 1600px. Generate WebP/AVIF alongside and use
+  `<picture>` — should cut the payload by half.
+- Add a favicon. `og:` tags are in, but `og:image` needs an absolute URL
+  once you have a domain.
+- Fonts load from Google Fonts. Self-host if you care about the extra
+  round-trip or about EU data rules.
 
-## Accessibility
+## What's already handled
 
-- Color contrast checks clean in both themes for body + UI text.
-- `prefers-reduced-motion` disables the reveal animations.
-- `aria-current="page"` on the active nav link; nav landmarks labeled.
-- Focus states inherit from hover — consider adding a visible
-  `:focus-visible` ring if keyboard use is a concern.
+Responsive to 390px, keyboard-navigable lightbox (arrows, Escape, focus trap),
+visible focus rings, `prefers-reduced-motion` respected, no layout shift
+(every `<img>` has width/height), lazy loading below the fold.
